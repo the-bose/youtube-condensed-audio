@@ -40,8 +40,10 @@ def main():
         title = yt.title
         streams = yt.streams.filter(only_audio=True)
         captions = yt.captions
-        # Need to support multiple captions
-        caption = captions['en']
+        for cap in captions:
+            if "auto-generated" not in str(cap):
+                caption = cap
+                break
 
         print("Downloading video : ", title)
         streams[0].download(output_path="cache", filename=str(index))
@@ -60,7 +62,7 @@ def main():
     except Exception as e:
         print("ERROR IN SETTING UP")
         print(e)
-        print("USUALLY TRYING AGAIN WOULD FIX THIS...")
+        print("TRY AGAIN OR CHECK THE VIDEO URL...")
     finally:
         shutil.rmtree("cache")
 

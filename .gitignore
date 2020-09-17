@@ -3,4 +3,5 @@ __pycache__/
 venv/
 cache/
 del.py
+config_.txt
 *.mp3
