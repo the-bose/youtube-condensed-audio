@@ -1,12 +1,15 @@
 #!/usr/bin/env python
-import os
-import shutil
 import configparser
-import pysrt
+import os
+import re
+import shutil
+
 import ffmpeg
-from pytube import YouTube, Caption
+import pysrt
+from pytube import Caption, Playlist, YouTube
 
 import cfg
+
 
 def configure():
     #
@@ -24,7 +27,7 @@ def configure():
 
 def main():
     #
-    # Downloads audio and subs
+    # Set up cache, check for video/playlist
     #
     try:
         shutil.rmtree("cache")
@@ -35,8 +38,43 @@ def main():
         os.makedirs("cache/final_slices")
 
     try:
-        index=0
-        yt = YouTube(cfg.link)
+        if "playlist" in cfg.link:
+            title = playlist_processor()
+        else:
+            title = video_processor(cfg.link, 0)
+
+        print("\nCombining all files...")
+        combine_all(title)
+    except Exception as e:
+        print("AN EXCEPTION HAS OCCURRED")
+        print(e)
+    finally:
+        shutil.rmtree("cache")
+
+def playlist_processor():
+    #
+    # Get each video from a playlist and process the video
+    #
+    try:
+        playlist = Playlist(cfg.link)
+        playlist._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
+        video_index = 0
+        for video_url in playlist:
+            print(f"\nProcessing video {video_index+1} of {len(playlist)}:")
+            video_processor(video_url, video_index)
+            video_index += 1
+        return playlist.title()
+    except Exception as e:
+        print("ERROR SETTING UP PLAYLIST")
+        print(e)
+        print("CHECK THE PLAYLIST URL AND TRY AGAIN...")
+
+def video_processor(video_link, index):
+    #
+    # Downloads audio and subs
+    #
+    try:
+        yt = YouTube(video_link)
         title = yt.title
         streams = yt.streams.filter(only_audio=True)
         captions = yt.captions
@@ -49,7 +87,7 @@ def main():
         if caption == None:
             if cfg.exclude_no_sub:
                 print("NOT DOWNLOADING (NO SUBS) : ", title)
-                return
+                return yt.title
 
         print("Downloading video : ", title)
         streams[0].download(output_path="cache", filename=str(index))
@@ -64,17 +102,11 @@ def main():
 
             print("Slicing video's audio...")
             slice_audio(index)
-
-        print("Combining all files...")
-        combine_all(index, title)
-
-        print("CONDENSED AUDIO CREATED SUCCESSFULLY")
+        return yt.title
     except Exception as e:
         print("ERROR IN SETTING UP")
         print(e)
         print("TRY AGAIN OR CHECK THE VIDEO URL...")
-    finally:
-        shutil.rmtree("cache")
 
 def slice_audio(file_index):
     #
@@ -123,22 +155,24 @@ def move_audio(file_index):
         .run(quiet=True)
     )
 
-def combine_all(final_index, file_name):
+def combine_all(file_name):
     #
     # Combines all the output audio and sets speed
     #
     try:
-        old_file = "cache/final_slices/"+str(final_index)+".mp3"
+        location = "cache/final_slices/"
+        old_files = "|".join([location + _ for _ in os.listdir(location)])
         file_name = "".join(_ for _ in file_name if _.isalnum())+".mp3"
         (
             ffmpeg
-            .input(old_file)
+            .input(f"concat:{old_files}")
             .filter("atempo", cfg.speed)
             .output(file_name)
-            .run(quiet=True)
+            .run(quiet=True, overwrite_output=True)
         )
+        print("CONDENSED AUDIO CREATED SUCCESSFULLY")
     except Exception as e:
-        print("ERROR IN COMBINING FINAL AUDIO", e)
+        print("ERROR IN COMBINING FINAL AUDIO :", e)
 
 if __name__ == "__main__":
     configure()

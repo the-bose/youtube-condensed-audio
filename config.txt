@@ -1,4 +1,4 @@
 [parameters]
-link=https://www.youtube.com/watch?v=
+link=https://www.youtube.com/
 exclude_no_sub=true
 speed=1.00
