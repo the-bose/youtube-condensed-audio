@@ -27,3 +27,5 @@ If you have no idea what condensed audio is and how useful it is for language le
   python app.py
 ```
 * Find the condensed audio ```mp3``` file in the same folder as "app.py"
+
+![demo](http://i.imgur.com/SFOtDsyh.gif)
