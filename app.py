@@ -42,9 +42,9 @@ def main():
             title = playlist_processor()
         else:
             title = video_processor(cfg.link, 0)
-
-        print("\nCombining all files...")
-        combine_all(title)
+        if(len(os.listdir("cache/final_slices"))):
+            print("\nCombining all files...")
+            combine_all(title)
     except Exception as e:
         print("AN EXCEPTION HAS OCCURRED")
         print(e)
