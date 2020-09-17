@@ -18,16 +18,13 @@ If you have no idea what condensed audio is and how useful it is for language le
 ## Usage
 * Configure the "config.txt"
   * **link** - Link to the YouTube video.
-  * **exclude_no_sub** - (true/false) Neglects/Downloads videos with no subs **(HASN'T BEEN CONFIGURED YET!)**.
+  * **exclude_no_sub** - (true/false) Neglects/Downloads videos with no subs.
   * **speed** - Speed of the final condensed audio (1.00 = Normal Speed).
 * Run "app.py"
 ```sh
   python app.py
 ```
 * Find the condensed audio ```mp3``` file in the same folder as "app.py"
-
-## Note
-* Only works for YouTube videos with English ('en') subs.
 
 ## What's next?
 * Downloading YouTube videos that have non-English subs.

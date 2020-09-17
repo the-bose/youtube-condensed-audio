@@ -40,20 +40,30 @@ def main():
         title = yt.title
         streams = yt.streams.filter(only_audio=True)
         captions = yt.captions
+        caption = None
         for cap in captions:
             if "auto-generated" not in str(cap):
                 caption = cap
                 break
 
+        if caption == None:
+            if cfg.exclude_no_sub:
+                print("NOT DOWNLOADING (NO SUBS) : ", title)
+                return
+
         print("Downloading video : ", title)
         streams[0].download(output_path="cache", filename=str(index))
 
-        print("Downloading subtitles...")
-        with open("cache/"+str(index)+".srt", "w") as f:
-            f.write(caption.generate_srt_captions())
+        if caption == None:
+            print("NO SUBTITLES FOUND FOR : ", title)
+            move_audio(index)
+        else:
+            print("Downloading subtitles...")
+            with open("cache/"+str(index)+".srt", "w") as f:
+                f.write(caption.generate_srt_captions())
 
-        print("Slicing video's audio...")
-        slice_audio(index)
+            print("Slicing video's audio...")
+            slice_audio(index)
 
         print("Combining all files...")
         combine_all(index, title)
@@ -101,6 +111,17 @@ def slice_audio(file_index):
 
     except Exception as e:
         print("ERROR IN SLICING VIDEO", e)
+
+def move_audio(file_index):
+    #
+    # Converts and moves file that has been downloaded without captions
+    #
+    (
+        ffmpeg
+        .input("cache/"+str(file_index)+".mp4")
+        .output("cache/final_slices/"+str(file_index)+".mp3")
+        .run(quiet=True)
+    )
 
 def combine_all(final_index, file_name):
     #
