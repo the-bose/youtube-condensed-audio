@@ -10,7 +10,7 @@ If you have no idea what condensed audio is and how useful it is for language le
 ## Installation
 * Download and extract the ZIP or Clone repository
 ```sh
-  git clone https://github.com/the-bose/collagify.git
+  git clone https://github.com/the-bose/youtube-condensed-audio/
 ```
 * Install dependencies
 ```sh
