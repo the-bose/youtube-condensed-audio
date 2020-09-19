@@ -50,6 +50,7 @@ def main():
         print(e)
     finally:
         shutil.rmtree("cache")
+        input("Press any key to quit...")
 
 def playlist_processor():
     #
@@ -97,7 +98,7 @@ def video_processor(video_link, index):
             move_audio(index)
         else:
             print("Downloading subtitles...")
-            with open("cache/"+str(index)+".srt", "w") as f:
+            with open("cache/"+str(index)+".srt", "w", encoding="utf-8") as f:
                 f.write(caption.generate_srt_captions())
 
             print("Slicing video's audio...")
