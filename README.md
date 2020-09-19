@@ -1,5 +1,5 @@
 # Youtube Condensed Audio
-Create condensed audio files from YouTube videos with subtitles.
+Create condensed audio files from YouTube videos and playlists with subtitles.
 
 # Condensed Audio
 If you have no idea what condensed audio is and how useful it is for language learning, please take a look at [this video](https://www.youtube.com/watch?v=QOLTeO-uCYU) by Matt vs. Japan.
@@ -8,14 +8,18 @@ If you have no idea what condensed audio is and how useful it is for language le
 ![img](https://imgur.com/RPmsqUA.png)
 
 ## Installation
-* Download and extract the ZIP or Clone repository
-```sh
-  git clone https://github.com/the-bose/youtube-condensed-audio/
-```
-* Install dependencies
-```sh
-  pip install -r requirements.txt
-```
+* User
+  * Download and extract the archive from the release.
+  * Check the **Usage** section below for usage info.
+* Developer
+  * Download and extract the ZIP or Clone repository
+  ```sh
+    git clone https://github.com/the-bose/youtube-condensed-audio/
+  ```
+  * Install dependencies
+  ```sh
+    pip install -r requirements.txt
+  ```
 
 ## Usage
 * Configure the "config.txt"
@@ -27,5 +31,3 @@ If you have no idea what condensed audio is and how useful it is for language le
   python app.py
 ```
 * Find the condensed audio ```mp3``` file in the same folder as "app.py"
-
-![demo](http://i.imgur.com/SFOtDsyh.gif)
