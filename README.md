@@ -11,7 +11,7 @@ If you have no idea what condensed audio is and how useful it is for language le
 * User
   * Download and extract the archive from the [releases section](https://github.com/the-bose/youtube-condensed-audio/releases) based on your operating system.
   * Check the **Configuration** section below for configuring ```config.txt```.
-  * Run ```youtube-audio-condenser.exe``` (Windows) or ```youtube-audio-condenser``` (Linux).
+  * Run ```youtube-audio-condenser.exe``` (Windows) or ```youtube-audio-condenser``` (Linux/Mac).
   * Find the condensed audio ```mp3``` file in the same folder as ```app.py```.
 * Developer
   * Download and extract the repository ZIP or clone the repository
