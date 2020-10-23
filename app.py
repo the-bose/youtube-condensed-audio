@@ -162,7 +162,9 @@ def combine_all(file_name):
     #
     try:
         location = "cache/final_slices/"
-        old_files = "|".join([location + _ for _ in os.listdir(location)])
+        final_slices_list_sorted = os.listdir(location)
+        final_slices_list_sorted.sort(key=lambda x: int(re.sub('\D', '',x)))
+        old_files = "|".join([location + _ for _ in final_slices_list_sorted])
         file_name = "".join(_ for _ in file_name if _.isalnum())+".mp3"
         (
             ffmpeg
